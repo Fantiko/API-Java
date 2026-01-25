@@ -15,6 +15,9 @@ public class Departamento {
         this.capacidade = capacidade;
         this.ativo = ativo;
     }
+    
+    public Departamento() {
+    }
 
     //--------------------------------------------------------------------------------------------------------------
     public int getId() {
