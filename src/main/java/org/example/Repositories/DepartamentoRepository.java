@@ -2,7 +2,7 @@ package org.example.Repositories;
 
 import org.example.Model.Departamento;
 
-import org.example.Database.MySQLConnection;
+import org.example.Database.SQLiteConnection;
 import org.example.Model.Departamento;
 
 import java.sql.*;
@@ -23,7 +23,7 @@ public class DepartamentoRepository {
         
         String sql = "SELECT * FROM departamento WHERE id = ?";
         
-        try(Connection conn = MySQLConnection.getConnection();
+        try(Connection conn = SQLiteConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
         ) {
             stmt.setInt(1,id);
@@ -52,7 +52,7 @@ public class DepartamentoRepository {
         String sql = "SELECT * FROM departamento";
 
         try (
-            Connection conn = MySQLConnection.getConnection();
+            Connection conn = SQLiteConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery()
         ) {
@@ -81,7 +81,7 @@ public class DepartamentoRepository {
             INSERT INTO departamento (nome, gestor, capacidade, ativo)
             VALUES (?, ?, ?, ?) """;
         try (
-            Connection conn = MySQLConnection.getConnection();
+            Connection conn = SQLiteConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.setString(1, departamento.getNome());

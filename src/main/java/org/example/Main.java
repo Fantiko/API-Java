@@ -4,10 +4,14 @@ package org.example;
 import io.javalin.Javalin;
 import org.example.Controler.DepartamentoControler;
 import org.example.Controler.FuncionarioControler;
+import org.example.Database.IniDataBase;
 import org.example.Repositories.FuncionarioRepository;
 
 public class Main {
     public static void main(String[] args) {
+        
+        IniDataBase.init();
+        
         FuncionarioControler funcionarioControler = new FuncionarioControler();
         DepartamentoControler departamentoControler = new DepartamentoControler();
 
