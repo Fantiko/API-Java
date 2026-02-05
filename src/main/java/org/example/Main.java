@@ -10,7 +10,7 @@ import org.example.Repositories.FuncionarioRepository;
 public class Main {
     public static void main(String[] args) {
         
-        IniDataBase.init();
+        //IniDataBase.init();
         
         FuncionarioControler funcionarioControler = new FuncionarioControler();
         DepartamentoControler departamentoControler = new DepartamentoControler();
