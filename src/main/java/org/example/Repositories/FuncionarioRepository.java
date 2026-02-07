@@ -1,5 +1,9 @@
 package org.example.Repositories;
 
+import org.example.Database.MySQLConnection;
+import org.example.Model.Funcionario;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,27 +11,102 @@ import java.util.Optional;
 import org.example.Model.Funcionario;
 
 public class FuncionarioRepository {
-    //dao
-    private final List<Funcionario> funcionarios = new ArrayList<>();
-
-    public FuncionarioRepository() {
-        // Dados iniciais para teste
-        funcionarios.add(new Funcionario(1, "João Silva", "Maria Souza", "Desenvolvedor", new java.util.Date()));
-        funcionarios.add(new Funcionario(2, "Ana Costa", "Carlos Pereira", "Analista de Sistemas", new java.util.Date()));
-    }
-
-    public void adicionarFuncionario(Funcionario funcionario) {
-        funcionarios.add(funcionario);
-    }
+    
     public List<Funcionario> getFuncionarios() {
-        return funcionarios;
+
+    List<Funcionario> lista = new ArrayList<>();
+
+    String sql = "SELECT * FROM funcionario";
+
+    try (
+        Connection conn = MySQLConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+    ) {
+
+        while (rs.next()) {
+
+            Funcionario f = new Funcionario(
+                rs.getInt("id"),
+                rs.getString("nome"),
+                rs.getString("gestor"),
+                rs.getString("cargo"),
+                rs.getDate("data_contratacao")
+            );
+
+            lista.add(f);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+
+public Optional<Funcionario> getFuncionarioById(int id) {
+
+    String sql = "SELECT * FROM funcionario WHERE id = ?";
+
+    try (
+        Connection conn = MySQLConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+    ) {
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+
+            Funcionario f = new Funcionario(
+                rs.getInt("id"),
+                rs.getString("nome"),
+                rs.getString("gestor"),
+                rs.getString("cargo"),
+                rs.getDate("data_contratacao")
+            );
+
+            return Optional.of(f);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
 
-    public Optional<Funcionario> getFuncionarioById(int id) {
-        return funcionarios.stream()
-                .filter(funcionario -> funcionario.getId() == id)
-                .findFirst();
+    return Optional.empty();
+}
+ 
+    public void adicionarFuncionario(Funcionario f) {
+    String sql = """
+        INSERT INTO funcionario
+        (nome, gestor, cargo, data_contratacao, departamento_id)
+        VALUES (?, ?, ?, ?, ?)
+    """;
+
+    try (Connection conn = MySQLConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, f.getNome());
+        stmt.setString(2, f.getGestor());
+        stmt.setString(3, f.getCargo());
+        /*
+        Trocado para pegar o horario do computador
+        stmt.setDate(4, new java.sql.Date(f.getDataContratacao().getTime()));
+
+        */
+        
+        java.util.Date data = f.getDataContratacao();
+
+        if (data == null) {
+            data = new java.util.Date();
+        }
+        stmt.setDate(4, new java.sql.Date(data.getTime()));
+
+        stmt.setInt(5, f.getDepartamento());
+        stmt.executeUpdate();
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        }
     }
-
-
 }

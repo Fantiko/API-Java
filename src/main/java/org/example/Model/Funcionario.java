@@ -12,8 +12,9 @@ public class Funcionario {
 
     Date dataContratacao;
 
-    Departamento departamento;
+    int departamento;
 
+    public Funcionario() {}
 
     public Funcionario(int id, String nome, String gestor, String cargo, Date dataContratacao) {
         this.id = id;
@@ -63,11 +64,11 @@ public class Funcionario {
         this.dataContratacao = dataContratacao;
     }
 
-    public Departamento getDepartamento() {
+    public int getDepartamento() {
         return departamento;
     }
 
-    public void setDepartamento(Departamento departamento) {
+    public void setDepartamento(int departamento) {
         this.departamento = departamento;
     }
 }
