@@ -18,3 +18,31 @@ CREATE TABLE IF NOT EXISTS funcionario (
     departamento_id INT,
     FOREIGN KEY (departamento_id) REFERENCES departamento(id)
 );
+
+-- Criar um Departamento (obrigatório ter um antes de criar funcionário)
+INSERT INTO departamento (nome, gestor, capacidade, ativo) 
+VALUES ('Tecnologia', 'Rafael', 10, true);
+
+-- Criar Funcionários vinculados a esse departamento (ID 1)
+INSERT INTO funcionario (nome, gestor, cargo, data_contratacao, departamento_id) 
+VALUES ('Ruan Ribeiro', 'Rafael', 'Dev Java', '2025-02-12', 1);
+
+INSERT INTO funcionario (nome, gestor, cargo, data_contratacao, departamento_id) 
+VALUES ('Kaio Stefan', 'Rafael', 'Analista', '2025-02-10', 1);
+
+USE gestao_funcionarios;
+
+-- Criando tabela para administradores
+CREATE TABLE IF NOT EXISTS administrador()
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cargo VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    senha VARCHAR(100)
+);
+
+-- Cria Administrador primário
+INSERT INTO administrador (nome, cargo, email, senha)
+VALUES ('Administrador', 'Ruan', 'admin@empresa.com', '1234');
+
+SELECT * FROM funcionario;

@@ -38,7 +38,6 @@ public class FuncionarioRepository {
                 rs.getString("cargo"),
                 rs.getDate("data_contratacao")
             );
-
             lista.add(f);
         }
 
