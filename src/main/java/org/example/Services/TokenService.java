@@ -8,7 +8,9 @@ import org.example.Model.Administrador;
 
 public class TokenService {
 
-    private static final String SEGREDO = "SENHAPARATOKEN";
+    private static final String SEGREDO = System.getenv("JWT_SECRET") != null
+            ? System.getenv("JWT_SECRET")
+            : "Chave_Provisoria_Trabalho";
     private static final Algorithm ALGORITMO = Algorithm.HMAC256(SEGREDO);
 
     // GERA TOKEN
