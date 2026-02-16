@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class AdministradorRepository {
 
     // ROTA UTILIZADO NA LISTAGEM DOS ADMINISTRADORES (NÃO LISTA SENHA)
@@ -56,8 +58,8 @@ public class AdministradorRepository {
             stmt.setString(2, adm.getCargo());
             stmt.setString(3, adm.getEmail());
 
-            //Definindo uma senha padrão para ser alterada posteriormente pelo próprio administrador
-            String senhaPadrao = "12345";
+            // Definindo uma senha padrão (1234) para ser alterada posteriormente pelo próprio administrador
+            String senhaPadrao = BCrypt.hashpw("1234", BCrypt.gensalt());
             stmt.setString(4, senhaPadrao);
 
             stmt.executeUpdate();
@@ -87,20 +89,33 @@ public class AdministradorRepository {
 
     // ROTA PARA ATUALIZAR AS INFORMAÇÕES DE UM ADMINISTRADOR (NÃO ATUALIZA SENHA)
 
-    // --- ajustar para não deixar null quem nao for preenchido ---
     public boolean updateAdministrador(Administrador adm) {
-        String sql = "UPDATE administrador SET nome = ?, cargo = ?, email = ? WHERE id = ?";
+        String sqlBusca = "SELECT nome, cargo, email FROM administrador WHERE id = ?";
+        String nomeAtual = null, cargoAtual = null, emailAtual = null;
 
         try (Connection conn = MySQLConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sqlBusca)) {
 
-            stmt.setString(1, adm.getNome());
-            stmt.setString(2, adm.getCargo());
-            stmt.setString(3, adm.getEmail());
-            stmt.setInt(4, adm.getId());
+            stmt.setInt(1, adm.getId());
+            ResultSet rs = stmt.executeQuery();
 
-            int registros = stmt.executeUpdate();
-            return registros > 0;
+            if (rs.next()) {
+                nomeAtual = rs.getString("nome");
+                cargoAtual = rs.getString("cargo");
+                emailAtual = rs.getString("email");
+            } else {
+                return false;
+            }
+
+            String sqlUpdate = "UPDATE administrador SET nome = ?, cargo = ?, email = ? WHERE id = ?";
+            try (PreparedStatement stmtUpdate = conn.prepareStatement(sqlUpdate)) {
+                stmtUpdate.setString(1, (adm.getNome() != null && !adm.getNome().isEmpty()) ? adm.getNome() : nomeAtual);
+                stmtUpdate.setString(2, (adm.getCargo() != null && !adm.getCargo().isEmpty()) ? adm.getCargo() : cargoAtual);
+                stmtUpdate.setString(3, (adm.getEmail() != null && !adm.getEmail().isEmpty()) ? adm.getEmail() : emailAtual);
+                stmtUpdate.setInt(4, adm.getId());
+
+                return stmtUpdate.executeUpdate() > 0;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,44 +126,59 @@ public class AdministradorRepository {
     // ROTA PARA ATUALIZAÇÃO DA SENHA (NECESSÁRIO INFORMAR SENHA ATUAL)
     public boolean updateSenha(int id, String senhaAntiga, String senhaNova) {
 
-        // SOMENTE ATUALIZA A SENHA SE O ID E A SENHA ATUAL  FOREM PREENCHIDOS
-        String sql = "UPDATE administrador SET senha = ? WHERE id = ? AND senha = ?";
+        String sql = "SELECT senha FROM administrador WHERE id = ?";
 
         try (Connection conn = MySQLConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, senhaNova);
-            stmt.setInt(2, id);
-            stmt.setString(3, senhaAntiga);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
 
-            int registro = stmt.executeUpdate();
-            return registro > 0;
+            if (rs.next()) {
+                String senhaBanco = rs.getString("senha");
+
+                // VERIFICA SE SENHA DIGITADA É IGUAL HASH DO BANCO
+                if (BCrypt.checkpw(senhaAntiga, senhaBanco)) {
+
+                    // ENCRIPTA NOVA SENHA E ATUALIZA
+                    String sqlUpdate = "UPDATE administrador SET senha = ? WHERE id = ?";
+                    try (PreparedStatement stmtUpdate = conn.prepareStatement(sqlUpdate)) {
+                        stmtUpdate.setString(1, BCrypt.hashpw(senhaNova, BCrypt.gensalt()));
+                        stmtUpdate.setInt(2, id);
+                        return stmtUpdate.executeUpdate() > 0;
+                    }
+                }
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+        return false;
     }
 
     // ROTA PARA LOGIN (VERIFICA SE O EMAIL E SENHA EXISTEM NO BANCO)
-    public Administrador login(String email, String senha) {
-        String sql = "SELECT id, nome, cargo, email FROM administrador WHERE email = ? AND senha = ?";
+    public Administrador login(String email, String inputSenha) {
+        String sql = "SELECT id, nome, cargo, email, senha FROM administrador WHERE email = ?";
 
         try (Connection conn = MySQLConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, email);
-            stmt.setString(2, senha);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new Administrador(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("cargo"),
-                        rs.getString("email")
-                );
+
+                String senhaBanco = rs.getString("senha");
+                if (BCrypt.checkpw(inputSenha, senhaBanco)) {
+                    return new Administrador(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("cargo"),
+                            rs.getString("email")
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

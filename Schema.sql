@@ -33,7 +33,7 @@ VALUES ('Kaio Stefan', 'Rafael', 'Analista', '2025-02-10', 1);
 USE gestao_funcionarios;
 
 -- Criando tabela para administradores
-CREATE TABLE IF NOT EXISTS administrador()
+CREATE TABLE IF NOT EXISTS administrador(
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     cargo VARCHAR(100),
@@ -41,8 +41,9 @@ CREATE TABLE IF NOT EXISTS administrador()
     senha VARCHAR(100)
 );
 
--- Cria Administrador primário
+-- Cria Administrador primário --- Senha: 1234
 INSERT INTO administrador (nome, cargo, email, senha)
-VALUES ('Administrador', 'Ruan', 'admin@empresa.com', '1234');
+VALUES ('Administrador', 'Ruan', 'admin@empresa.com', '$2a$10$qCiGqw3qzJm5b1745/LpEu9tprHjXJrEo1au394uVvLekpFAXgUTW');
 
 SELECT * FROM funcionario;
+--drop table funcionario, administrador, departamento;
