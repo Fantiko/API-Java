@@ -6,12 +6,12 @@ import org.example.Controler.AdministradorControler;
 import org.example.Controler.DepartamentoControler;
 import org.example.Controler.FuncionarioControler;
 import org.example.Repositories.FuncionarioRepository;
-
-
 import org.example.Services.TokenService;
 import org.example.Controler.AuthController;
 import io.javalin.http.HandlerType;
 import io.javalin.http.UnauthorizedResponse;
+import static io.javalin.apibuilder.ApiBuilder.*;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -23,12 +23,51 @@ public class Main {
         AdministradorControler administradorControler = new AdministradorControler();
 
 
-        var app = Javalin.create().start(7000);
+        var app = Javalin.create(config -> {
 
-        // AUTENTICAÇÃO
-        // ROTA DE LOGIN (PÚBLICA)
-        app.post("/auth/login", AuthController::login);
+            config.router.apiBuilder(()->{
+              
+                // Rota de Login (Pública)
+                path("auth", () -> {
+                    post("login", AuthController::login);
+                });
 
+                path("funcionarios",() ->{
+                    get(funcionarioControler::getAll);
+                    post(funcionarioControler::create);
+
+                    path("{id}", ()->{
+                        get(funcionarioControler::getOne);
+                        put(funcionarioControler::update);
+                        delete(funcionarioControler::delete);
+                    });
+                });
+
+                path("departamentos", () -> {
+                    get(departamentoControler::getAll);
+                    post(departamentoControler::create);
+
+                    path("{id}", () -> {
+                        get(departamentoControler::getOne);
+                        put(departamentoControler::update);
+                        delete(departamentoControler::delete);
+                    });
+                });
+              
+                path("administrador", () -> {
+                    get(administradorControler::listar);
+                    post(administradorControler::cadastrar);
+                    path("{id}", () -> {
+                        put(administradorControler::atualizar);
+                        delete(administradorControler::deletar);
+                        patch("senha", administradorControler::alterarSenha);
+                    });
+                });  
+
+            });
+        }).start(7000);
+      
+        // Autenticação
         app.before(ctx -> {String rota = ctx.path();
 
             if (rota.equals("/auth/login")) {
@@ -43,24 +82,11 @@ public class Main {
             }
         });
 
-        // Define as rotas (Endpoints)
-
-        // Rotas de Funcionários ---
-        app.get("/funcionarios", funcionarioControler::getAll);
-        app.get("/funcionarios/{id}", funcionarioControler::getOne);
-        app.post("/funcionarios", funcionarioControler::create);
-
-        // --- Rotas de Departamento ---
-        app.get("/departamento", departamentoControler::getAll);
-        app.get("/departamento/{id}", departamentoControler::getOne);
-        app.post("/departamento", departamentoControler::create);
-
-        // --- Rotas de Administrador ---
-        app.get("/administrador", administradorControler::listar);
-        app.post("/administrador", administradorControler::cadastrar);
-        app.put("/administrador/{id}", administradorControler::atualizar);
-        app.delete("/administrador/{id}", administradorControler::deletar);
-        app.patch("/administrador/{id}/senha", administradorControler::alterarSenha);
+        // Tratamento de Erros Global para Status Codes
+        app.exception(Exception.class, (e, ctx) -> {
+            ctx.status(500).result("Erro interno no servidor: " + e.getMessage());
+        });
+       
 
     }
 }

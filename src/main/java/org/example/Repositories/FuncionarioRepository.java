@@ -12,17 +12,22 @@ import org.example.Model.Funcionario;
 
 public class FuncionarioRepository {
     
-    public List<Funcionario> getFuncionarios() {
+    public List<Funcionario> getFuncionarios(int page, int size) {
 
     List<Funcionario> lista = new ArrayList<>();
+    int offset = (page - 1) * size;
 
-    String sql = "SELECT * FROM funcionario";
+    String sql = "SELECT * FROM funcionario LIMIT ? OFFSET ?";
 
     try (
         Connection conn = MySQLConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
     ) {
+
+        stmt.setInt(1, size);   // Quantidade de itens
+        stmt.setInt(2, offset); // Onde começar
+
+        ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
 
@@ -106,6 +111,49 @@ public Optional<Funcionario> getFuncionarioById(int id) {
 
     } catch (SQLException e) {
         e.printStackTrace();
+        }
+    }
+
+    public boolean atualizarFuncionario(Funcionario funcionario) {
+        String sql = """
+                UPDATE funcionario
+            SET nome = ?, gestor = ?, cargo = ?, data_contratacao = ?, departamento_id = ?
+            WHERE id = ?
+        """;
+
+        try {
+            Connection conn = MySQLConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, funcionario.getNome());
+            stmt.setString(2, funcionario.getGestor());
+            stmt.setString(3, funcionario.getCargo());
+            stmt.setDate(4, new java.sql.Date(funcionario.getDataContratacao().getTime()));
+            stmt.setInt(5, funcionario.getDepartamento());
+            stmt.setInt(6, funcionario.getId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deletarFuncionario(int id) {
+        String sql = "DELETE FROM funcionario WHERE id = ?";
+
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
