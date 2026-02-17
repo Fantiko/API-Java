@@ -6,7 +6,7 @@ public class Funcionario {
     int id;
     String nome;
 
-    String gestor;
+    int gestor;
 
     String cargo;
 
@@ -16,7 +16,7 @@ public class Funcionario {
 
     public Funcionario() {}
 
-    public Funcionario(int id, String nome, String gestor, String cargo, Date dataContratacao) {
+    public Funcionario(int id, String nome, int gestor, String cargo, Date dataContratacao) {
         this.id = id;
         this.nome = nome;
         this.gestor = gestor;
@@ -40,11 +40,11 @@ public class Funcionario {
         this.nome = nome;
     }
 
-    public String getGestor() {
+    public int getGestor() {
         return gestor;
     }
 
-    public void setGestor(String gestor) {
+    public void setGestor(int gestor) {
         this.gestor = gestor;
     }
 

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS departamento (
 CREATE TABLE IF NOT EXISTS funcionario (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
-    gestor VARCHAR(100),
+    gestor INT,
     cargo VARCHAR(100),
     data_contratacao DATE,
     departamento_id INT,
@@ -25,10 +25,10 @@ VALUES ('Tecnologia', 'Rafael', 10, true);
 
 -- Criar Funcionários vinculados a esse departamento (ID 1)
 INSERT INTO funcionario (nome, gestor, cargo, data_contratacao, departamento_id) 
-VALUES ('Ruan Ribeiro', 'Rafael', 'Dev Java', '2025-02-12', 1);
+VALUES ('Ruan Ribeiro', '', 'Dev Java', '2025-02-12', 1);
 
 INSERT INTO funcionario (nome, gestor, cargo, data_contratacao, departamento_id) 
-VALUES ('Kaio Stefan', 'Rafael', 'Analista', '2025-02-10', 1);
+VALUES ('Kaio Stefan', '1', 'Analista', '2025-02-10', 1);
 
 USE gestao_funcionarios;
 

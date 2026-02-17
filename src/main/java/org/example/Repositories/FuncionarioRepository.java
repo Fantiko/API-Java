@@ -34,7 +34,7 @@ public class FuncionarioRepository {
             Funcionario f = new Funcionario(
                 rs.getInt("id"),
                 rs.getString("nome"),
-                rs.getString("gestor"),
+                rs.getInt("gestor"),
                 rs.getString("cargo"),
                 rs.getDate("data_contratacao")
             );
@@ -65,7 +65,7 @@ public Optional<Funcionario> getFuncionarioById(int id) {
             Funcionario f = new Funcionario(
                 rs.getInt("id"),
                 rs.getString("nome"),
-                rs.getString("gestor"),
+                rs.getInt("gestor"),
                 rs.getString("cargo"),
                 rs.getDate("data_contratacao")
             );
@@ -91,7 +91,7 @@ public Optional<Funcionario> getFuncionarioById(int id) {
          PreparedStatement stmt = conn.prepareStatement(sql)) {
 
         stmt.setString(1, f.getNome());
-        stmt.setString(2, f.getGestor());
+        stmt.setInt(2, f.getGestor());
         stmt.setString(3, f.getCargo());
         /*
         Trocado para pegar o horario do computador
@@ -116,7 +116,7 @@ public Optional<Funcionario> getFuncionarioById(int id) {
 
     public boolean atualizarFuncionario(Funcionario funcionario) {
         String sql = """
-                UPDATE funcionario
+            UPDATE funcionario
             SET nome = ?, gestor = ?, cargo = ?, data_contratacao = ?, departamento_id = ?
             WHERE id = ?
         """;
@@ -126,7 +126,7 @@ public Optional<Funcionario> getFuncionarioById(int id) {
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, funcionario.getNome());
-            stmt.setString(2, funcionario.getGestor());
+            stmt.setInt(2, funcionario.getGestor());
             stmt.setString(3, funcionario.getCargo());
             stmt.setDate(4, new java.sql.Date(funcionario.getDataContratacao().getTime()));
             stmt.setInt(5, funcionario.getDepartamento());
