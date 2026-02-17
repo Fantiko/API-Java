@@ -38,6 +38,7 @@ public class FuncionarioRepository {
                 rs.getString("cargo"),
                 rs.getDate("data_contratacao")
             );
+            f.setDepartamento(rs.getInt("departamento_id"));
             lista.add(f);
         }
 
@@ -69,7 +70,7 @@ public Optional<Funcionario> getFuncionarioById(int id) {
                 rs.getString("cargo"),
                 rs.getDate("data_contratacao")
             );
-
+            f.setDepartamento(rs.getInt("departamento_id"));
             return Optional.of(f);
         }
 

@@ -114,7 +114,13 @@ public class DepartamentoRepository {
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.setString(1, departamento.getNome());
-            stmt.setString(2, null);
+
+            if (departamento.getGerente() != null && departamento.getGerente().getId() > 0) {
+                stmt.setInt(2, departamento.getGerente().getId()); // Salva o ID do gerente
+            } else {
+                stmt.setNull(2, java.sql.Types.INTEGER); // Salva null apenas se realmente não houver gerente
+            }
+
             stmt.setInt(3, departamento.getCapacidade());
             stmt.setBoolean(4, departamento.isAtivo());
             stmt.setInt(5, departamento.getId());

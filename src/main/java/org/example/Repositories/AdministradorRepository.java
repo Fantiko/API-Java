@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -87,35 +88,42 @@ public class AdministradorRepository {
         }
     }
 
-    // ROTA PARA ATUALIZAR AS INFORMAÇÕES DE UM ADMINISTRADOR (NÃO ATUALIZA SENHA)
-
-    public boolean updateAdministrador(Administrador adm) {
-        String sqlBusca = "SELECT nome, cargo, email FROM administrador WHERE id = ?";
-        String nomeAtual = null, cargoAtual = null, emailAtual = null;
+    public Optional<Administrador> getAdministradorById(int id) {
+        String sql = "SELECT id, nome, cargo, email FROM administrador WHERE id = ?";
 
         try (Connection conn = MySQLConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlBusca)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, adm.getId());
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                nomeAtual = rs.getString("nome");
-                cargoAtual = rs.getString("cargo");
-                emailAtual = rs.getString("email");
-            } else {
-                return false;
+                return Optional.of(new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("cargo"),
+                        rs.getString("email")
+                ));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
 
-            String sqlUpdate = "UPDATE administrador SET nome = ?, cargo = ?, email = ? WHERE id = ?";
-            try (PreparedStatement stmtUpdate = conn.prepareStatement(sqlUpdate)) {
-                stmtUpdate.setString(1, (adm.getNome() != null && !adm.getNome().isEmpty()) ? adm.getNome() : nomeAtual);
-                stmtUpdate.setString(2, (adm.getCargo() != null && !adm.getCargo().isEmpty()) ? adm.getCargo() : cargoAtual);
-                stmtUpdate.setString(3, (adm.getEmail() != null && !adm.getEmail().isEmpty()) ? adm.getEmail() : emailAtual);
-                stmtUpdate.setInt(4, adm.getId());
+    // ROTA PARA ATUALIZAR AS INFORMAÇÕES DE UM ADMINISTRADOR (NÃO ATUALIZA SENHA)
+    public boolean updateAdministrador(Administrador adm) {
+        String sqlUpdate = "UPDATE administrador SET nome = ?, cargo = ?, email = ? WHERE id = ?";
 
-                return stmtUpdate.executeUpdate() > 0;
-            }
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement stmtUpdate = conn.prepareStatement(sqlUpdate)) {
+
+            stmtUpdate.setString(1, adm.getNome());
+            stmtUpdate.setString(2, adm.getCargo());
+            stmtUpdate.setString(3, adm.getEmail());
+            stmtUpdate.setInt(4, adm.getId());
+
+            return stmtUpdate.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
