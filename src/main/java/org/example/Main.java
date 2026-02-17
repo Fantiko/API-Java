@@ -51,6 +51,11 @@ public class Main {
                         get(departamentoControler::getOne);
                         put(departamentoControler::update);
                         delete(departamentoControler::delete);
+
+                        path("funcionarios", () -> {
+                            get(departamentoControler::getFuncionariosPorDepartamento);
+                        });
+
                     });
                 });
               

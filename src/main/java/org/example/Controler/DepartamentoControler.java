@@ -22,7 +22,7 @@ public class DepartamentoControler {
 
     //GET /departamentos
     public void getAll(Context ctx) {
-        // Captura os parâmetros de paginação via Query Params (RF06)
+        // Captura os parâmetros de paginação via Query
         int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
         int size = ctx.queryParamAsClass("size", Integer.class).getOrDefault(10);
 
@@ -107,4 +107,22 @@ public class DepartamentoControler {
             context.status(404).result("Departamento não encontrado");
         }
     }
+
+    public void getFuncionariosPorDepartamento(Context context){
+        int page = context.queryParamAsClass("page", Integer.class).getOrDefault(1);
+        int size = context.queryParamAsClass("size", Integer.class).getOrDefault(10);
+
+        int idDepartamento = Integer.parseInt(context.pathParam("id"));
+
+        Optional<List<Funcionario>> funcionarios = funcionarioRepository.getFuncionariosPorDepartamento(idDepartamento, page, size);
+
+        funcionarios.ifPresentOrElse(
+                lista -> context.status(200).json(lista),
+                () -> context.status(404).result("Departamento ou funcionários não encontrados")
+        );
+    }
+
+
+
+
 }

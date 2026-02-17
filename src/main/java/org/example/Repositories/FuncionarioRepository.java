@@ -156,4 +156,38 @@ public Optional<Funcionario> getFuncionarioById(int id) {
             return false;
         }
     }
+    public Optional<List<Funcionario>> getFuncionariosPorDepartamento(int departamentoId, int page, int size) {
+        String sql = "SELECT * FROM funcionario WHERE departamento_id = ? LIMIT ? OFFSET ?";
+
+        List<Funcionario> funcionarios = new ArrayList<>();
+
+
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, departamentoId);
+            stmt.setInt(2, size);
+            stmt.setInt(3, (page - 1) * size);
+
+            ResultSet rs = stmt.executeQuery();
+
+           while (rs.next()) {
+                Funcionario f = new Funcionario(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getInt("gestor"),
+                    rs.getString("cargo"),
+                    rs.getDate("data_contratacao")
+                );
+                funcionarios.add(f);
+            }
+
+            return Optional.of(funcionarios);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
 }
