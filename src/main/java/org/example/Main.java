@@ -74,7 +74,12 @@ public class Main {
                 return;
             }
 
-            // ROTAS: GET, POST, PUT, PATCH e DELETE (PRIVADAS | EXIGEM O TOKEN)
+            // ROTA GET (PÚBLICA)
+            if (ctx.method().equals(HandlerType.GET)) {
+                return;
+            }
+
+            // ROTAS: POST, PUT, PATCH e DELETE (PRIVADAS | EXIGEM O TOKEN)
             String header = ctx.header("Authorization");
 
             if (header == null || TokenService.validarToken(header) == null) {
