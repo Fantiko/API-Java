@@ -74,7 +74,7 @@ public class DepartamentoRepository {
     public Optional<Departamento> adicionarDepartamento(Departamento departamento) {
 		
 	String sql = """
-            INSERT INTO departamento (nome, gestor, capacidade, ativo)
+            INSERT INTO departamento (nome, gerente, capacidade, ativo)
             VALUES (?, ?, ?, ?) """;
         try (
             Connection conn = MySQLConnection.getConnection();
@@ -96,7 +96,7 @@ public class DepartamentoRepository {
     public boolean atualizarDepartamento(Departamento departamento) {
         String sql = """
             UPDATE departamento
-            SET nome = ?, gestor = ?, capacidade = ?, ativo = ?
+            SET nome = ?, gerente = ?, capacidade = ?, ativo = ?
             WHERE id = ?""";
 
         try (

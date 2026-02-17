@@ -4,7 +4,7 @@ USE gestao_funcionarios;
 CREATE TABLE IF NOT EXISTS departamento (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
-    gestor VARCHAR(100),
+    gerente INT NOT NULL,
     capacidade INT NOT NULL,
     ativo BOOLEAN NOT NULL
 );
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS funcionario (
 );
 
 -- Criar um Departamento (obrigatório ter um antes de criar funcionário)
-INSERT INTO departamento (nome, gestor, capacidade, ativo) 
+INSERT INTO departamento (nome, gerente, capacidade, ativo)
 VALUES ('Tecnologia', 'Rafael', 10, true);
 
 -- Criar Funcionários vinculados a esse departamento (ID 1)
