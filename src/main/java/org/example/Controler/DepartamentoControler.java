@@ -81,17 +81,43 @@ public class DepartamentoControler {
 
     //PUT /departamentos/{id}
     public void update(Context context) {
-        var departamento = context.bodyAsClass(org.example.Model.Departamento.class);
-        int id = Integer.parseInt(context.pathParam("id"));
+        try {
+            int id = Integer.parseInt(context.pathParam("id"));
+            var departamentoExistenteOpt = departamentoRepository.getDepartamentoById(id);
 
-        var departamentoExistente = departamentoRepository.getDepartamentoById(id);
+            if (departamentoExistenteOpt.isEmpty()) {
+                context.status(404).result("Departamento não encontrado!");
+                return;
+            }
 
-        if(departamentoExistente.isPresent()){
-            departamento.setId(id); // Garantir que o ID seja o mesmo
-            departamentoRepository.atualizarDepartamento(departamento);
-            context.status(200);
-        } else {
-            context.status(404).result("Departamento não encontrado");
+            Departamento depExistente = departamentoExistenteOpt.get();
+            var depRecebidoJson = context.bodyAsClass(org.example.Model.Departamento.class);
+            java.util.Map<String, Object> jsonMap = context.bodyAsClass(java.util.Map.class);
+
+            if (depRecebidoJson.getNome() != null && !depRecebidoJson.getNome().isEmpty()) {
+                depExistente.setNome(depRecebidoJson.getNome());
+            }
+
+            if (depRecebidoJson.getGerente() != null) {
+                depExistente.setGerente(depRecebidoJson.getGerente());
+            }
+
+            if (depRecebidoJson.getCapacidade() > 0) {
+                depExistente.setCapacidade(depRecebidoJson.getCapacidade());
+            }
+
+            if (jsonMap.containsKey("ativo")) {
+                depExistente.setAtivo(depRecebidoJson.isAtivo());
+            }
+
+            if (departamentoRepository.atualizarDepartamento(depExistente)) {
+                context.status(200).result("Departamento atualizado com sucesso!");
+            } else {
+                context.status(500).result("Erro ao atualizar o departamento no banco.");
+            }
+
+        } catch (NumberFormatException e) {
+            context.status(400).result("ID inválido na URL!");
         }
     }
 

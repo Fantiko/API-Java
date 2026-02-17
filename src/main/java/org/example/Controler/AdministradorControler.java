@@ -6,6 +6,7 @@ import org.example.Repositories.AdministradorRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class AdministradorControler {
 
@@ -34,10 +35,28 @@ public class AdministradorControler {
     public void atualizar(Context ctx) {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
-            Administrador adm = ctx.bodyAsClass(Administrador.class);
-            adm.setId(id);
 
-            if (repository.updateAdministrador(adm)) {
+            Optional<Administrador> adminExistenteOpt = repository.getAdministradorById(id);
+
+            if (adminExistenteOpt.isEmpty()) {
+                ctx.status(404).result("Administrador não encontrado!");
+                return;
+            }
+
+            Administrador admExistente = adminExistenteOpt.get();
+            Administrador admRecebidoJson = ctx.bodyAsClass(Administrador.class);
+
+            if (admRecebidoJson.getNome() != null && !admRecebidoJson.getNome().isEmpty()) {
+                admExistente.setNome(admRecebidoJson.getNome());
+            }
+            if (admRecebidoJson.getCargo() != null && !admRecebidoJson.getCargo().isEmpty()) {
+                admExistente.setCargo(admRecebidoJson.getCargo());
+            }
+            if (admRecebidoJson.getEmail() != null && !admRecebidoJson.getEmail().isEmpty()) {
+                admExistente.setEmail(admRecebidoJson.getEmail());
+            }
+
+            if (repository.updateAdministrador(admExistente)) {
                 ctx.status(200).result("Dados atualizados com sucesso!");
             } else {
                 ctx.status(404).result("Administrador não encontrado!");

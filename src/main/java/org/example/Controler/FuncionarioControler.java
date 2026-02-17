@@ -48,18 +48,45 @@ public class FuncionarioControler {
 
 
     public void update(Context context) {
-        var funcionario = context.bodyAsClass(org.example.Model.Funcionario.class);
-        int id = Integer.parseInt(context.pathParam("id"));
+        try {
+            int id = Integer.parseInt(context.pathParam("id"));
 
-        var funcionarioExistente = funcionarioRepository.getFuncionarioById(id);
-        if (funcionarioExistente.isPresent()) {
-            funcionario.setId(id); // Garantir que o ID seja o mesmo
-            funcionarioRepository.atualizarFuncionario(funcionario);
-            context.status(200);
-        } else {
-            context.status(404).result("Funcionário não encontrado");
+            var funcionarioExistenteOpt = funcionarioRepository.getFuncionarioById(id);
+
+            if (funcionarioExistenteOpt.isEmpty()) {
+                context.status(404).result("Funcionário não encontrado!");
+                return;
+            }
+
+            Funcionario funcExistente = funcionarioExistenteOpt.get();
+
+            var funcRecebidoJson = context.bodyAsClass(org.example.Model.Funcionario.class);
+
+            if (funcRecebidoJson.getNome() != null && !funcRecebidoJson.getNome().isEmpty()) {
+                funcExistente.setNome(funcRecebidoJson.getNome());
+            }
+            if (funcRecebidoJson.getGestor() > 0) {
+                funcExistente.setGestor(funcRecebidoJson.getGestor());
+            }
+            if (funcRecebidoJson.getCargo() != null && !funcRecebidoJson.getCargo().isEmpty()) {
+                funcExistente.setCargo(funcRecebidoJson.getCargo());
+            }
+            if (funcRecebidoJson.getDataContratacao() != null) {
+                funcExistente.setDataContratacao(funcRecebidoJson.getDataContratacao());
+            }
+            if (funcRecebidoJson.getDepartamento() > 0) {
+                funcExistente.setDepartamento(funcRecebidoJson.getDepartamento());
+            }
+
+            if (funcionarioRepository.atualizarFuncionario(funcExistente)) {
+                context.status(200).result("Funcionário atualizado com sucesso!");
+            } else {
+                context.status(500).result("Erro ao atualizar o funcionário no banco.");
+            }
+
+        } catch (NumberFormatException e) {
+            context.status(400).result("ID inválido na URL!");
         }
-
     }
 
     public void delete(Context context) {
