@@ -3,12 +3,12 @@ package org.example.Model;
 public class Departamento {
     int id;
     String nome;
-    int gerente;
+    Funcionario gerente;
     int capacidade;
     boolean ativo;
 
 
-    public Departamento(int id, String nome, int gerente, int capacidade, boolean ativo) {
+    public Departamento(int id, String nome, Funcionario gerente, int capacidade, boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.gerente = gerente;
@@ -36,11 +36,11 @@ public class Departamento {
         this.nome = nome;
     }
 
-    public int getGerente() {
+    public Funcionario getGerente() {
         return gerente;
     }
 
-    public void setGerente(int gerente) {
+    public void setGerente(Funcionario gerente) {
         this.gerente = gerente;
     }
 

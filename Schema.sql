@@ -4,7 +4,7 @@ USE gestao_funcionarios;
 CREATE TABLE IF NOT EXISTS departamento (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
-    gerente INT NOT NULL,
+    gerente INT,
     capacidade INT NOT NULL,
     ativo BOOLEAN NOT NULL
 );
