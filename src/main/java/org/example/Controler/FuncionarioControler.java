@@ -22,7 +22,9 @@ public class FuncionarioControler {
         if (page<1)page = 1;
         if (size<1 || size > 50)size = 10;
 
-        List<Funcionario > funcionarios = funcionarioRepository.getFuncionarios(page, size);
+        String nome = cxt.queryParam("nome");
+
+        List<Funcionario > funcionarios = funcionarioRepository.getFuncionarios(page, size, nome);
 
         cxt.status(200).json(funcionarios);
     }

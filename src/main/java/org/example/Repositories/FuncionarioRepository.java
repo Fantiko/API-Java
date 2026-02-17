@@ -12,20 +12,23 @@ import org.example.Model.Funcionario;
 
 public class FuncionarioRepository {
     
-    public List<Funcionario> getFuncionarios(int page, int size) {
+    public List<Funcionario> getFuncionarios(int page, int size, String nomeFiltro) {
 
     List<Funcionario> lista = new ArrayList<>();
     int offset = (page - 1) * size;
 
-    String sql = "SELECT * FROM funcionario LIMIT ? OFFSET ?";
+    String sql = "SELECT * FROM funcionario WHERE nome LIKE ? LIMIT ? OFFSET ?";
 
     try (
         Connection conn = MySQLConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
     ) {
+        String busca = (nomeFiltro != null && !nomeFiltro.isEmpty()) ? "%" + nomeFiltro + "%" : "%";
 
-        stmt.setInt(1, size);   // Quantidade de itens
-        stmt.setInt(2, offset); // Onde começar
+
+        stmt.setString(1, busca); // Filtro de nome
+        stmt.setInt(2, size);   // Quantidade de itens
+        stmt.setInt(3, offset); // Onde começar
 
         ResultSet rs = stmt.executeQuery();
 
@@ -94,11 +97,6 @@ public Optional<Funcionario> getFuncionarioById(int id) {
         stmt.setString(1, f.getNome());
         stmt.setInt(2, f.getGestor());
         stmt.setString(3, f.getCargo());
-        /*
-        Trocado para pegar o horario do computador
-        stmt.setDate(4, new java.sql.Date(f.getDataContratacao().getTime()));
-
-        */
         
         java.util.Date data = f.getDataContratacao();
 
