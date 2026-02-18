@@ -115,8 +115,8 @@ mvn clean install
 
 ```json
 {
-  "usuario": "admin",
-  "senha": "123"
+  "usuario": "admin@empresa.com",
+  "senha": "1234"
 }
 ```
 
