@@ -128,7 +128,7 @@ public class DepartamentoControler {
 
         if(departamentoExistente.isPresent()){
             departamentoRepository.deletarDepartamento(id);
-            context.status(204);
+            context.status(200).result("Departamento removido com sucesso!");
         } else {
             context.status(404).result("Departamento não encontrado");
         }

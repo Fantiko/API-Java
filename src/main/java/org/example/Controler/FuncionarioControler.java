@@ -45,7 +45,7 @@ public class FuncionarioControler {
     public void create(Context cxt){
         var funcionario = cxt.bodyAsClass(org.example.Model.Funcionario.class);
         funcionarioRepository.adicionarFuncionario(funcionario);
-        cxt.status(201);
+        cxt.status(201).result("Funcionário adicionado!");
     }
 
 
@@ -96,7 +96,7 @@ public class FuncionarioControler {
         var funcionarioExistente = funcionarioRepository.getFuncionarioById(id);
         if (funcionarioExistente.isPresent()) {
             funcionarioRepository.deletarFuncionario(id);
-            context.status(204);
+            context.status(204).result("Funcionário removido");
         } else {
             context.status(404).result("Funcionário não encontrado");
         }
