@@ -1,0 +1,561 @@
+{
+  "info": {
+    "_postman_id": "e8203317-60d8-4c00-9953-8f5382a20cb2",
+    "name": "Trabalho SD",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52477774",
+    "_collection_link": "https://go.postman.co/collection/52477774-e8203317-60d8-4c00-9953-8f5382a20cb2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Administrador",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\":\"admin@empresa.com\",\r\n    \"senha\": 1234\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:7000/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criação ADM",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\":\"Helder\",\r\n    \"cargo\":\"Professor\",\r\n    \"email\":\"Helder@ufes.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:7000/administrador",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "administrador"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetAdministrador",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7000/administrador",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "administrador"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Run\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:7000/administrador/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "administrador",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Administrador",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7000/administrador/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "administrador",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alterar Senha",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\r\n    \"senhaAntiga\": \"1234\",\r\n    \"senhaNova\": \"4321\"\r\n  }"
+            },
+            "url": {
+              "raw": "http://localhost:7000/administrador/2/senha",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "administrador",
+                "2",
+                "senha"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Departamento",
+      "item": [
+        {
+          "name": "Adicionar Departamento",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Marketing\",\r\n  \"gerente\": {\r\n    \"id\": 7\r\n  },\r\n  \"capacidade\": 10,\r\n  \"ativo\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:7000/departamentos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "departamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Lista Departamentos",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Editar Departamento",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Financeiro e Contabilidade\",\r\n  \"gerente\": {\r\n    \"id\": 3\r\n  },\r\n  \"capacidade\": 25,\r\n  \"ativo\": false\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:7000/departamentos/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "departamentos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remover Departamento",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Financeiro e Contabilidade\",\r\n  \"gerente\": {\r\n    \"id\": 3\r\n  },\r\n  \"capacidade\": 25,\r\n  \"ativo\": false\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:7000/departamentos/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "departamentos",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pesquisa Departamento ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7000/departamentos/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "departamentos",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Funcionario Por Departamento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7000/departamentos/2/funcionarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "departamentos",
+                "2",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Funcionario",
+      "item": [
+        {
+          "name": "Adicionar Funcionario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\r\n    \"nome\": \"Bruno Oliveira\",\r\n    \"gestor\": 2,\r\n    \"cargo\": \"Desenvolvedor Backend\",\r\n    \"dataContratacao\": \"2022-08-20\",\r\n    \"departamento\": 3\r\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:7000/funcionarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Funcionarios",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\r\n    \"nome\": \"Bruno Oliveira\",\r\n    \"gestor\": 2,\r\n    \"cargo\": \"Desenvolvedor Backend\",\r\n    \"dataContratacao\": \"2022-08-20\",\r\n    \"departamento\": 3\r\n  }"
+            },
+            "url": {
+              "raw": "http://localhost:7000/funcionarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Funcionarios por ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\r\n    \"nome\": \"Bruno Oliveira\",\r\n    \"gestor\": 2,\r\n    \"cargo\": \"Desenvolvedor Backend\",\r\n    \"dataContratacao\": \"2022-08-20\",\r\n    \"departamento\": 3\r\n  }"
+            },
+            "url": {
+              "raw": "http://localhost:7000/funcionarios/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "funcionarios",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Funcionario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Carlos Mendes Silva\",\r\n  \"gestor\": 2\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:7000/funcionarios/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "funcionarios",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remover Funcionario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBlbXByZXNhLmNvbSIsImlkIjoxfQ.N5g2sTrLbAR4u6ZTeVJ1RsHJxaHYPMqDVkeesR4tVuE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7000/funcionarios/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7000",
+              "path": [
+                "funcionarios",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
